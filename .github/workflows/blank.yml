@@ -1,0 +1,39 @@
+name: CloudFront Check
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_env:
+        description: 'Target environment (dev or prod)'
+        required: true
+        default: 'dev'
+
+jobs:
+  check-cloudfront:
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.target_env }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1   # set your region
+
+      - name: Run CloudFront instance check for dev
+        if: ${{ github.event.inputs.target_env == 'dev' }}
+        run: |
+          echo "Checking CloudFront instances in DEV..."
+          # Your DEV env command to check CloudFront
+          aws cloudfront list-distributions --profile dev-profile
+
+      - name: Run CloudFront instance check for prod
+        if: ${{ github.event.inputs.target_env == 'prod' }}
+        run: |
+          echo "Checking CloudFront instances in PROD..."
+          # Your PROD env command to check CloudFront
+          aws cloudfront list-distributions --profile prod-profile
