@@ -27,6 +27,7 @@ jobs:
       - name: Run CloudFront instance check for dev
         if: ${{ github.event.inputs.target_env == 'dev' }}
         run: |
+          printenv
           echo "Checking CloudFront instances in DEV..."
           # Your DEV env command to check CloudFront
           aws cloudfront list-distributions
