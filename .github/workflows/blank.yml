@@ -29,11 +29,11 @@ jobs:
         run: |
           echo "Checking CloudFront instances in DEV..."
           # Your DEV env command to check CloudFront
-          aws cloudfront list-distributions --profile dev-profile
+          aws cloudfront list-distributions
 
       - name: Run CloudFront instance check for prod
         if: ${{ github.event.inputs.target_env == 'prod' }}
         run: |
           echo "Checking CloudFront instances in PROD..."
           # Your PROD env command to check CloudFront
-          aws cloudfront list-distributions --profile prod-profile
+          aws cloudfront list-distributions 
